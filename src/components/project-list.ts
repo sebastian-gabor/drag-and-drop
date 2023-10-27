@@ -13,14 +13,15 @@ export class ProjectList
 
   constructor(private type: "active" | "finished") {
     super("project-list", "app", false, `${type}-projects`);
-
     this.assignedProjects = [];
+
     this.configure();
     this.renderContent();
   }
+
   @autobind
-  dragOverHandler(event: DragEvent): void {
-    if (event.dataTransfer && event.dataTransfer!.types[0] === "text/plain") {
+  dragOverHandler(event: DragEvent) {
+    if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
       event.preventDefault();
       const listEl = this.element.querySelector("ul")!;
       listEl.classList.add("droppable");
@@ -28,7 +29,7 @@ export class ProjectList
   }
 
   @autobind
-  dropHandler(event: DragEvent): void {
+  dropHandler(event: DragEvent) {
     const prjId = event.dataTransfer!.getData("text/plain");
     projectState.moveProject(
       prjId,
@@ -37,12 +38,12 @@ export class ProjectList
   }
 
   @autobind
-  dragLeaveHandler(_: DragEvent): void {
+  dragLeaveHandler(_: DragEvent) {
     const listEl = this.element.querySelector("ul")!;
     listEl.classList.remove("droppable");
   }
 
-  configure(): void {
+  configure() {
     this.element.addEventListener("dragover", this.dragOverHandler);
     this.element.addEventListener("dragleave", this.dragLeaveHandler);
     this.element.addEventListener("drop", this.dropHandler);
@@ -60,9 +61,8 @@ export class ProjectList
   }
 
   renderContent() {
-    const listID = `${this.type}-projects-list`;
-
-    this.element.querySelector("ul")!.id = listID;
+    const listId = `${this.type}-projects-list`;
+    this.element.querySelector("ul")!.id = listId;
     this.element.querySelector("h2")!.textContent =
       this.type.toUpperCase() + " PROJECTS";
   }

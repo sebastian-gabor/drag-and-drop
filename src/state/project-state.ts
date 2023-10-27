@@ -5,8 +5,8 @@ type Listener<T> = (items: T[]) => void;
 class State<T> {
   protected listeners: Listener<T>[] = [];
 
-  addListener(listenersFn: Listener<T>) {
-    this.listeners.push(listenersFn);
+  addListener(listenerFn: Listener<T>) {
+    this.listeners.push(listenerFn);
   }
 }
 
@@ -26,28 +26,27 @@ export class ProjectState extends State<Project> {
     return this.instance;
   }
 
-  addProject(title: string, desc: string, numOfPeople: number) {
+  addProject(title: string, description: string, numOfPeople: number) {
     const newProject = new Project(
-      Math.random.toString(),
+      Math.random().toString(),
       title,
-      desc,
+      description,
       numOfPeople,
       ProjectStatus.Active
     );
-
     this.projects.push(newProject);
-    this.updateListener();
+    this.updateListeners();
   }
 
   moveProject(projectId: string, newStatus: ProjectStatus) {
-    const project = this.projects.find((prj) => (prj.id = projectId));
+    const project = this.projects.find((prj) => prj.id === projectId);
     if (project && project.status !== newStatus) {
       project.status = newStatus;
-      this.updateListener();
+      this.updateListeners();
     }
   }
 
-  private updateListener() {
+  private updateListeners() {
     for (const listenerFn of this.listeners) {
       listenerFn(this.projects.slice());
     }

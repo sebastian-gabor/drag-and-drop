@@ -1,5 +1,7 @@
+export const something = "...";
+
 export abstract class Component<T extends HTMLElement, U extends HTMLElement> {
-  templateEl: HTMLTemplateElement;
+  templateElement: HTMLTemplateElement;
   hostElement: T;
   element: U;
 
@@ -9,12 +11,15 @@ export abstract class Component<T extends HTMLElement, U extends HTMLElement> {
     insertAtStart: boolean,
     newElementId?: string
   ) {
-    this.templateEl = document.getElementById(
+    this.templateElement = document.getElementById(
       templateId
-    ) as HTMLTemplateElement;
-    this.hostElement = document.getElementById(hostElementId) as T;
+    )! as HTMLTemplateElement;
+    this.hostElement = document.getElementById(hostElementId)! as T;
 
-    const importedNode = document.importNode(this.templateEl.content, true);
+    const importedNode = document.importNode(
+      this.templateElement.content,
+      true
+    );
     this.element = importedNode.firstElementChild! as U;
     if (newElementId) {
       this.element.id = newElementId;
